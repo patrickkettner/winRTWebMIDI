@@ -1,4 +1,4 @@
-import { _newMIDIConnectionEvent } from './MIDIConnectionEvent.js';
+import { MIDIConnectionEvent } from './MIDIConnectionEvent.js';
 
 // SPEC: http://webaudio.github.io/web-midi-api/#dom-midiport-open
 // open
@@ -47,7 +47,9 @@ function _MIDIPort_open(winrtMIDIPort) {
 //      to the step labeled success below.
     if (port.connection !== 'disconnected') {
       port.connection = 'pending';
-      _newMIDIConnectionEvent(port)
+
+      let connectionEvent = new MIDIConnectionEvent('statechange', {}, port)
+      port.dispatchEvent(connectionEvent)
     }
 //    7. Attempt to obtain access to the given MIDI device in the system. If the
 //       device is unavailable (e.g. is already in use by another process and cannot be
@@ -66,7 +68,8 @@ function _MIDIPort_open(winrtMIDIPort) {
     port.connection = 'open'
 //    and enqueue a new MIDIConnectionEvent to the statechange handler of the
 //    MIDIAccess and to the statechange handler of the MIDIPort.
-    _newMIDIConnectionEvent(port)
+    let connectionEvent = new MIDIConnectionEvent('statechange', {}, port)
+    port.dispatchEvent(connectionEvent)
 //    If this port is an output port and has any pending data that is waiting to be
 //    sent, asynchronously begin sending that data.
 //  TODO ^^

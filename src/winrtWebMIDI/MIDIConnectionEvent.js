@@ -1,4 +1,4 @@
-function _newMIDIConnectionEvent(winRTMIDIPort) {
+import '../throwIfMissing.js'
 //    SPEC: http://webaudio.github.io/web-midi-api/#dom-midiconnectionevent
 
 //    An event object implementing this interface is passed to a MIDIAccess' onstatechange
@@ -22,12 +22,17 @@ function _newMIDIConnectionEvent(winRTMIDIPort) {
 
 //    [Constructor(DOMString type,optional  MIDIConnectionEventInit eventInitDict)]
 //    interface MIDIConnectionEvent : Event {
+class MIDIConnectionEvent extends Event {
+  constructor(type = throwIfMissing(), eventInitDict, winRTMIDIPort = {}) {
+    super(type, eventInitDict)
 
-  let MIDIConnectionEvent = new CustomEvent('statechange')
-//    readonly attribute MIDIPort port;
-      Object.defineProperty(MIDIConnectionEvent, 'port', {value: winRTMIDIPort})
+    // setting Symbol.toStringTag makes the event appear as [object MIDIConnectionEvent]
+    // rather than [object Event] inside of the developer tools
+    this[Symbol.toStringTag] = 'MIDIConnectionEvent'
 
-      winRTMIDIPort.dispatchEvent(MIDIConnectionEvent)
+    //    readonly attribute MIDIPort port;
+    Object.defineProperty(this, 'port', { value: winRTMIDIPort })
+  }
 }
 
-export { _newMIDIConnectionEvent }
+export { MIDIConnectionEvent }

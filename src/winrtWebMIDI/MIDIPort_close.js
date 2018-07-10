@@ -1,4 +1,4 @@
-import { _newMIDIConnectionEvent } from './MIDIConnectionEvent.js';
+import { MIDIConnectionEvent } from './MIDIConnectionEvent.js';
 
 //   SPEC: http://webaudio.github.io/web-midi-api/#dom-midiport-close
 //   close
@@ -55,7 +55,8 @@ function _MIDIPort_close(winrtMIDIPort) {
     port.connection = 'closed'
 //      , and enqueue a new MIDIConnectionEvent to the statechange handler of the MIDIAccess
 //      and to the statechange handler of the MIDIPort.
-    _newMIDIConnectionEvent(port)
+    let connectionEvent = new MIDIConnectionEvent('statechange', {}, port)
+    port.dispatchEvent(connectionEvent)
 //    8. closed: Call resolver's accept(value) method with port as value argument.
     resolver(port)
 //    9. Terminate these steps.

@@ -1,21 +1,23 @@
-function _newMIDIMessageEvent(winRTMIDIMessage) {    
-//    SPEC: http://webaudio.github.io/web-midi-api/#MIDIMessageEvent
-  
-  let MIDIMessageEvent = new CustomEvent('midimessage')
-  
-  Object.defineProperties(MIDIMessageEvent, {
-    data: {
-      enumerable: true,
-// TODO this is almost surely going to break on non key events - TEST!
-      value: new Uint8Array([winRTMIDIMessage.type, winRTMIDIMessage.note, winRTMIDIMessage.velocity])
-    },
-    timeStamp: {
-      enumerable: true,
-      value: winRTMIDIMessage.timestamp
-    }
-  })
-  
-  return MIDIMessageEvent
-}
+class MIDIMessageEvent extends Event {
+  constructor(type, eventInitDict, winRTMIDIMessage={}) {
+    super('MIDIMessageEvent', eventInitDict)
 
-export { _newMIDIMessageEvent }
+    // setting Symbol.toStringTag makes the event appear as [object MIDIConnectionEvent]
+    // rather than [object Event] inside of the developer tools
+    this[Symbol.toStringTag] = 'MIDIMessageEvent'
+
+    Object.defineProperties(this, {
+      data: {
+        enumerable: true,
+  // TODO this is almost surely going to break on non key events - TEST!
+        value: new Uint8Array([winRTMIDIMessage.type, winRTMIDIMessage.note, winRTMIDIMessage.velocity])
+      },
+      timeStamp: {
+        enumerable: true,
+        value: winRTMIDIMessage.timestamp
+      }
+    })
+  }
+}
+  
+export { MIDIMessageEvent }

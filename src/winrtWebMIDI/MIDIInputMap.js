@@ -1,5 +1,5 @@
 import { MIDIInput } from './MIDIInput.js'
-import { _newMIDIMessageEvent } from './MIDIMessageEvent.js'
+import { MIDIMessageEvent } from './MIDIMessageEvent.js'
 
 function isSysExMessage(msg) {
   return msg.type === window.Windows.Devices.Midi.MidiMessageType.systemExclusive
@@ -60,7 +60,7 @@ async function initMIDIInputMap(MIDIOptions) {
     //       messages will be dispatched as they occur, while the normal messages will be buffered
     //       until they are complete (and then dispatched).
       
-        let midiMessage = _newMIDIMessageEvent(e.message)
+        let midiMessage = MIDIMessageEvent('midimessage', {}, e.message)
         port.dispatchEvent(midiMessage)
       }
     })

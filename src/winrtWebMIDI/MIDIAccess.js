@@ -2,7 +2,6 @@ import { EventTarget, defineEventAttribute } from 'event-target-shim';
 import { initMIDIInputMap } from './MIDIInputMap.js'
 import { initMIDIOutputMap } from './MIDIOutputMap.js'
 import { MIDIPort } from './MIDIPort.js'
-import { _newMIDIConnectionEvent } from './MIDIConnectionEvent.js'
 import { isUnsecureContext } from '../isUnsecureContext.js'
 import { DOMException } from 'w3c-domcore-errors'
 
@@ -47,12 +46,12 @@ function initMIDIAccess(MIDIOptions) {
               enumerable: false
               }
             })
+          }
+        }
+        
 //       onstatechange
 //         The handler called when a new port is connected or an existing port changes the state attribute.
 //         This event handler, of type MIDIConnectionEvent, MUST be supported by all objects implementing the MIDIAccess interface.
-        }
-        }
-        
         defineEventAttribute(MIDIAccess.prototype, "statechange")
 
          resolve(MIDIAccess)
